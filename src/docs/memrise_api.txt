@@ -17,7 +17,7 @@ Login:
 			csrfmiddlewaretoken=<csrftoken>&username=...&password=...
 
 		On success it will return the following header, which is the session token we are looking for:
-			Set-Cookie: sessionid_2=o6y0s3hnk8dy3ji5lpcs5mfwq2a5c8wnt
+			Set-Cookie: sessionid_2=o6y0s3hnk8dy3ji5lpcs5mfwq2a5c8wnt; Secure
 
 	
 
@@ -152,7 +152,7 @@ Bulk add: POST https://www.memrise.com/ajax/level/add_things_in_bulk/
 		German, English, Plural and inflected forms, Part of Speech. Any missing fields will be blank.
 
 	Headers:
-		Referer:  https://www.memrise.com/course/5561588/clone-course/edit/
+		Referer:  https://www.memrise.com/home/
 		Content-type: application/x-www-form-urlencoded
 		x-csrftoken: <csrf_token>
 
