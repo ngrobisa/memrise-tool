@@ -1,0 +1,290 @@
+=========================================================================================================
+Login:
+	1) GET a CSRF session token:
+		GET https://www.memrise.com/login/
+
+		Response demands setting 2 cookies (set-cookie):
+			csrftoken; SameSite
+
+	2) Login
+		POST https://www.memrise.com/login/
+
+		Headers:
+			Referer=https://www.memrise.com/login/
+			Content-Type=application/x-www-form-urlencoded
+
+		Body:
+			csrfmiddlewaretoken=<csrftoken>&username=...&password=...
+
+		On success it will return the following header, which is the session token we are looking for:
+			Set-Cookie: sessionid_2=o6y0s3hnk8dy3ji5lpcs5mfwq2a5c8wnt
+
+	
+
+
+=========================================================================================================
+Get courses:
+https://www.memrise.com/ajax/courses/dashboard/?courses_filter=most_recent&get_review_count=false
+
+
+{
+    "courses": [
+        {
+            "id": 1703475, 
+            "name": "Begegnungen A1+", 
+            "slug": "begegnungen-a1", 
+            "url": "/course/1703475/begegnungen-a1/", 
+            "description": "Complete vocabulary of Begegnungen A1+", 
+            "photo": "https://static.memrise.com/uploads/course_photos/24763488000171024032026.png", 
+            "photo_small": "https://static.memrise.com/img/100sqf/from/uploads/course_photos/24763488000171024032026.png", 
+            "photo_large": "https://static.memrise.com/img/400sqf/from/uploads/course_photos/24763488000171024032026.png", 
+            "num_things": 917, 
+            "num_levels": 8, 
+            "num_learners": 586, 
+            "source": {
+                "id": 6, 
+                "slug": "english", 
+                "name": "English", 
+                "photo": "https://static.memrise.com/uploads/category_photos/en.png", 
+                "parent_id": 578, 
+                "index": 1051, 
+                "language_code": "en"
+            }, 
+            "target": {
+                "id": 4, 
+                "slug": "german-2", 
+                "name": "German", 
+                "photo": "https://static.memrise.com/uploads/language_photos/german.png", 
+                "parent_id": 879, 
+                "index": 1048, 
+                "language_code": "de"
+            }, 
+            "learned": 379, 
+            "review": 148, 
+            "ignored": 0, 
+            "ltm": 231, 
+            "difficult": 23, 
+            "category": {
+                "name": "German", 
+                "photo": "https://static.memrise.com/uploads/language_photos/german.png"
+            }, 
+            "next_session": { ... }
+        }, 
+	...
+
+
+=========================================================================================================
+Get memos:
+https://www.memrise.com/api/mem/get_many_for_thing/?learnable_id=14969410224386&_=1569177600312
+
+{
+    "mems": [
+        {
+            "id": 21623275, 
+            "text": "mem note para guten morgen", 
+            "cre": "2019-09-22T18:38:33Z", 
+            "absolute_url": "/mem/21623275/mem-note-para-guten-morgen/", 
+            "rating": 0, 
+            "pinned": false, 
+            "image_original": "", 
+            "image_output_url": "", 
+            "direction": null, 
+            "thing_id": 228415073, 
+            "column_a": 1, 
+            "column_b": 2, 
+            "learnable_id": 14969410224386, 
+            "author_id": 24338901, 
+            "text_x_position": 1, 
+            "text_y_position": 2, 
+            "text_size": 28, 
+            "can_edit": true, 
+            "author": {
+                "id": 24338901, 
+                "username": "Nicky_Ramone", 
+                "photo_small": "https://static.memrise.com/img/100sqf/from/uploads/profiles/Nicky_Ramone71_170528_1754_06.jpg"
+            }
+        }
+    ]
+}
+
+
+
+=========================================================================================================
+Get levels: GET https://www.memrise.com/course/5556127/dummy/
+	Need to scrape response.
+
+
+
+=========================================================================================================
+Add level: POST https://www.memrise.com/ajax/level/add/
+
+	Headers:
+		Referer: https://www.memrise.com/course/5556127/dummy/edit/
+		Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+		x-csrftoken: <CSRF_TOKEN>
+		x-requested-with: XMLHttpRequest
+
+	form data (body):
+		course_id: 5556127
+		kind: things
+		pool_id: 6577328
+
+
+=========================================================================================================
+Set level title: POST https://www.memrise.com/ajax/level/set_title/
+	
+	form data (body):
+		level_id: 11947676
+		new_val: Chapter 1
+
+
+	Response:
+		{
+			"success": true
+		}
+
+
+=========================================================================================================
+Bulk add: POST https://www.memrise.com/ajax/level/add_things_in_bulk/
+
+	Quickly add lots of words by pasting in from a spreadsheet or CSV file. Words should be one per line - blank lines will be ignored. There is a limit of 1000
+	Only text columns will be added to, therefore each line should contain: 
+		German, English, Plural and inflected forms, Part of Speech. Any missing fields will be blank.
+
+	Headers:
+		Referer:  https://www.memrise.com/course/5561588/clone-course/edit/
+		Content-type: application/x-www-form-urlencoded
+		x-csrftoken: <csrf_token>
+
+	Body:
+		level_id: 11965648
+		word_delimiter: tab
+		data:
+			guten Morgen!	good morning!
+			guten Abend!	good evening!
+			die Lampe	lamp	die Lampen
+
+
+
+=========================================================================================================
+Get level contents:
+https://www.memrise.com/ajax/session/?course_id=1703475&course_slug=begegnungen-a1&level_index=1&session_slug=preview&_=1569172877453
+https://www.memrise.com/ajax/session/?course_id=1703475&level_index=1&session_slug=preview
+
+{
+    "initial_session_points": 956839, 
+    "session": { ... },
+    "boxes": [ ... ],
+	"learnables": [ ... ],
+	"screens": {
+		"10720963526914": {
+            "1": {
+                "item": {
+                    "label": "German", 
+                    "kind": "text", 
+                    "value": "Guten Morgen!", 
+                    "alternatives": [ ], 
+                    "style": [ ], 
+                    "direction": "target", 
+                    "markdown": false
+                }, 
+                "definition": {
+                    "label": "English", 
+                    "kind": "text", 
+                    "value": "good morning!", 
+                    "alternatives": [ ], 
+                    "style": [ ], 
+                    "direction": "source", 
+                    "markdown": false
+                }, 
+                "visible_info": [ ], 
+                "hidden_info": [ ], 
+                "attributes": [
+                    {
+                        "label": "Part of Speech", 
+                        "value": "expression"
+                    }
+                ], 
+                "audio": {
+                    "label": "Audio", 
+                    "kind": "audio", 
+                    "value": [
+                        {
+                            "normal": "https://static.memrise.com/uploads/audio/83613000120919203338.mp3", 
+                            "slow": null
+                        }, 
+                        {
+                            "normal": "https://static.memrise.com/uploads/things/audio/13285396_1367313780147.mp3", 
+                            "slow": null
+                        }
+                    ], 
+                    "alternatives": [ ], 
+                    "style": [ ], 
+                    "direction": "target", 
+                    "markdown": false
+                }, 
+                "markdown": false, 
+                "video": null, 
+                "template": "presentation"
+            }, 
+		...
+		    "1": {
+		        "item": {
+		            "label": "German", 
+		            "kind": "text", 
+		            "value": "die Muttersprache", 
+		            "alternatives": [ ], 
+		            "style": [ ], 
+		            "direction": "target", 
+		            "markdown": false
+		        }, 
+		        "definition": {
+		            "label": "English", 
+		            "kind": "text", 
+		            "value": "mother tongue", 
+		            "alternatives": [ ], 
+		            "style": [ ], 
+		            "direction": "source", 
+		            "markdown": false
+		        }, 
+		        "visible_info": [ ], 
+		        "hidden_info": [
+		            {
+		                "label": "Plural and inflected forms", 
+		                "kind": "text", 
+		                "value": "die Muttersprachen", 
+		                "alternatives": [ ], 
+		                "style": [ ], 
+		                "direction": "target", 
+		                "markdown": false
+		            }
+		        ], 
+		        "attributes": [
+		            {
+		                "label": "Part of Speech", 
+		                "value": "noun"
+		            }
+		        ], 
+		        "audio": {
+		            "label": "Audio", 
+		            "kind": "audio", 
+		            "value": [
+		                {
+		                    "normal": "https://static.memrise.com/uploads/audio/48200120107110604_711427_bd499.mp3", 
+		                    "slow": null
+		                }, 
+		                {
+		                    "normal": "https://static.memrise.com/uploads/things/audio/13284827_1367323454116.mp3", 
+		                    "slow": null
+		                }
+		            ], 
+		            "alternatives": [ ], 
+		            "style": [ ], 
+		            "direction": "target", 
+		            "markdown": false
+		        }, 
+		        "markdown": false, 
+		        "video": null, 
+		        "template": "presentation"
+		    }
+	}
